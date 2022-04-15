@@ -1,0 +1,52 @@
+service: payment-manager
+
+provider:
+  name: aws
+  runtime: nodejs14.x
+  stage: ${opt:stage, 'dev'}
+  region: ${opt:region, 'us-east-1'}
+  lambdaHashingVersion: 20201221
+  environment:
+    NODE_ENV: ${opt:stage, 'dev'}
+    REGION: ${opt:region, 'localhost'}
+
+plugins:
+  - serverless-offline
+
+package:
+  patterns:
+    - '!./**'
+    - './node_modules/**'
+    - './index-app.js'
+    - './src/**'
+    - '!./src/infra/migrations'
+
+functions:
+  app:
+    handler: index-app.handler
+    timeout: 6
+    events:
+      - http:
+          method: POST
+          path: '/client'
+          private: false
+      - http:
+          method: GET
+          path: '/client'
+          private: false
+      - http:
+          method: GET
+          path: '/client/{clientId}/profile'
+          private: false
+      - http:
+          method: GET
+          path: '/client/{clientId}/payments'
+          private: false
+      - http:
+          method: PUT
+          path: '/client/{clientId}/profile'
+          private: false
+      - http:
+          method: DELETE
+          path: '/client/{clientId}/profile'
+          private: false
