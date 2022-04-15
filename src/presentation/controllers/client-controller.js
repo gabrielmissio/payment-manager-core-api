@@ -3,6 +3,9 @@ const { ClientService } = require('../../domain/services');
 
 const createClient = async (request) => {
   try {
+    const existingClient = await ClientService.getClientProfile({ clientId: request.body.cpf });
+    if (existingClient) return ResponseHelper.conflict('CLIENT ALREADY EXISTS');
+
     const newClient = await ClientService.createClient(request.body);
 
     return ResponseHelper.created(newClient);
@@ -13,8 +16,8 @@ const createClient = async (request) => {
 };
 
 const getClients = async () => {
-  // TODO: implement filters
   try {
+    // TODO: implement filters
     const clients = await ClientService.getClients();
 
     return ResponseHelper.ok(clients);
