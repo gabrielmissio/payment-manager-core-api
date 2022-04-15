@@ -1,20 +1,17 @@
 const router = require('express').Router();
 
+const { ClientController } = require('../../presentation/controllers');
+const {
+  ExpressRouterAdapter: { adapt }
+} = require('../adapters');
+
 module.exports = (app) => {
   app.use('/', router);
 
-  router.post('/client', (req, res) => res.status(200).json({ message: '(POST) - /client' }));
-  router.get('/client', (req, res) => res.status(200).json({ message: '(GET) - /client' }));
-  router.get('/client/:clientId/profile', (req, res) =>
-    res.status(200).json({ message: '(GET) - /client/:client/profile' })
-  );
-  router.get('/client/:clientId/payments', (req, res) =>
-    res.status(200).json({ message: '(GET) - /client/:client/payment' })
-  );
-  router.put('/client/:clientId/profile', (req, res) =>
-    res.status(200).json({ message: '(PUT) - /client/:client/profile' })
-  );
-  router.delete('/client/:clientId/profile', (req, res) =>
-    res.status(200).json({ message: '(DELETE) - /client/:client/profile' })
-  );
+  router.post('/client', adapt(ClientController.createClient));
+  router.get('/client', adapt(ClientController.getClients));
+  router.get('/client/:clientId/profile', adapt(ClientController.getClientProfile));
+  router.get('/client/:clientId/payments', adapt(ClientController.getClientPayments));
+  router.put('/client/:clientId/profile', adapt(ClientController.updateClientProfile));
+  router.delete('/client/:clientId/profile', adapt(ClientController.deleteClientProfile));
 };
