@@ -28,5 +28,8 @@
     "husky": "^7.0.4",
     "jest": "^27.5.1",
     "prettier": "^2.6.2"
+  },
+  "dependencies": {
+    "aws-sdk": "^2.1115.0"
   }
 }
