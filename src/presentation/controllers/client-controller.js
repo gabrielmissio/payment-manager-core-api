@@ -1,24 +1,30 @@
 const { ResponseHelper } = require('../helpers');
+const { ClientService } = require('../../domain/services');
 
-const createClient = (request) => {
+const createClient = async (request) => {
   try {
-    return ResponseHelper.created({ request, message: '(POST) - /client' });
+    const newClient = await ClientService.createClient(request.body);
+
+    return ResponseHelper.created(newClient);
   } catch (error) {
     console.error(error);
     return ResponseHelper.exceptionHandler(error);
   }
 };
 
-const getClients = (request) => {
+const getClients = async () => {
+  // TODO: implement filters
   try {
-    return ResponseHelper.ok({ request, message: '(GET) - /client' });
+    const clients = await ClientService.getClients();
+
+    return ResponseHelper.ok(clients);
   } catch (error) {
     console.error(error);
     return ResponseHelper.exceptionHandler(error);
   }
 };
 
-const getClientProfile = (request) => {
+const getClientProfile = async (request) => {
   try {
     return ResponseHelper.ok({ request, message: '(GET) - /client/:client/profile' });
   } catch (error) {
@@ -27,7 +33,7 @@ const getClientProfile = (request) => {
   }
 };
 
-const getClientPayments = (request) => {
+const getClientPayments = async (request) => {
   try {
     return ResponseHelper.ok({ request, message: '(GET) - /client/:client/payment' });
   } catch (error) {
@@ -36,7 +42,7 @@ const getClientPayments = (request) => {
   }
 };
 
-const updateClientProfile = (request) => {
+const updateClientProfile = async (request) => {
   try {
     return ResponseHelper.ok({ request, message: '(PUT) - /client/:client/profile' });
   } catch (error) {
@@ -45,7 +51,7 @@ const updateClientProfile = (request) => {
   }
 };
 
-const deleteClientProfile = (request) => {
+const deleteClientProfile = async (request) => {
   try {
     return ResponseHelper.ok({ request, message: '(DELETE) - /client/:client/profile' });
   } catch (error) {

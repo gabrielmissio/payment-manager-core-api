@@ -33,7 +33,8 @@ const getProfilesByStatus = async ({ status } = {}) => {
   const parametros = {
     TableName: PAYMENT_MANAGER_TABLE_NAME,
     IndexName: 'status-index',
-    KeyConditionExpression: 'status = :status',
+    KeyConditionExpression: '#status = :status',
+    ExpressionAttributeNames: { '#status': 'status' },
     ExpressionAttributeValues: { ':status': status }
   };
 
