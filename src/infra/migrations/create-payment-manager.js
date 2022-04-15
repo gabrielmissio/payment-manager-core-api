@@ -1,9 +1,9 @@
 /* eslint-disable no-console */
 const { DYNAMODB } = require('../../main/config/aws-resources');
-const { PAYMENT_TABLE_NAME, NODE_ENV } = require('../../main/config/env');
+const { PAYMENT_MANAGER_TABLE_NAME, NODE_ENV } = require('../../main/config/env');
 
 const params = {
-  TableName: PAYMENT_TABLE_NAME,
+  TableName: PAYMENT_MANAGER_TABLE_NAME,
   AttributeDefinitions: [
     {
       AttributeName: 'PK',
@@ -58,7 +58,7 @@ const createTable = async () => {
 };
 
 const deleteTable = async () => {
-  const response = await DYNAMODB.deleteTable({ TableName: PAYMENT_TABLE_NAME }).promise();
+  const response = await DYNAMODB.deleteTable({ TableName: PAYMENT_MANAGER_TABLE_NAME }).promise();
   console.log(JSON.stringify(response));
 };
 
