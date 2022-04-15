@@ -7,7 +7,9 @@
     "test": "jest --color --runInBand --silent",
     "test-unit": "npm test -- -c jest-unit-config.js",
     "prepare": "husky install",
-    "lint": "npx eslint ."
+    "lint": "npx eslint .",
+    "migrations-start": "node src/infra/migrations/create-payment-manager.js start",
+    "migrations-undo": "node src/infra/migrations/create-payment-manager.js undo"
   },
   "repository": {
     "type": "git",
