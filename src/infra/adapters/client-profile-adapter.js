@@ -4,12 +4,14 @@ const inputOne = (payload) => ({
   ...payload
 });
 
-const outputOne = (payload) => {
-  const { PK, SK, ...data } = payload;
+const outputOne = ({ Item }) => {
+  if (!Item) return null;
+
+  const { PK, SK, ...data } = Item;
   return { ...data };
 };
 
-const outputMany = (payload) => payload.Items.map((item) => outputOne(item));
+const outputMany = (payload) => payload.Items.map((Item) => outputOne({ Item }));
 
 module.exports = {
   inputOne,

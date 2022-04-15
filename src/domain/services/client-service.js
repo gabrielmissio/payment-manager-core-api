@@ -3,8 +3,8 @@ const { DataHelper } = require('../../utils/helpers');
 const { ClientRepository } = require('../../infra/repositories');
 const { ClientProfileAdapter } = require('../../infra/adapters');
 
-const createClient = async (data) => {
-  if (!data) throw new MissingParamError('data');
+const createClient = async (payload) => {
+  if (!payload) throw new MissingParamError('payload');
 
   const currentDate = DataHelper.getCurrentDateISOString();
   const additionalInfo = {
@@ -13,8 +13,17 @@ const createClient = async (data) => {
     status: 'ACTIVE'
   };
 
-  const client = { ...data, ...additionalInfo };
+  const client = { ...payload, ...additionalInfo };
   await ClientRepository.create({ client: ClientProfileAdapter.inputOne(client) });
+
+  return client;
+};
+
+const getClientProfile = async ({ clientId }) => {
+  if (!clientId) throw new MissingParamError('clientId');
+
+  const data = await ClientRepository.getProfileByPK(ClientProfileAdapter.inputOne({ cpf: clientId }));
+  const client = ClientProfileAdapter.outputOne(data);
 
   return client;
 };
@@ -29,5 +38,6 @@ const getClients = async (filters = { status: 'ACTIVE' }) => {
 
 module.exports = {
   createClient,
+  getClientProfile,
   getClients
 };

@@ -26,7 +26,10 @@ const getClients = async () => {
 
 const getClientProfile = async (request) => {
   try {
-    return ResponseHelper.ok({ request, message: '(GET) - /client/:client/profile' });
+    const client = await ClientService.getClientProfile(request.params);
+    if (!client) return ResponseHelper.notFound('CLIENT NOT FOUND');
+
+    return ResponseHelper.ok(client);
   } catch (error) {
     console.error(error);
     return ResponseHelper.exceptionHandler(error);
