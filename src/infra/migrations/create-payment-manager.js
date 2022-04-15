@@ -16,6 +16,10 @@ const params = {
     {
       AttributeName: 'email',
       AttributeType: 'S'
+    },
+    {
+      AttributeName: 'status',
+      AttributeType: 'S'
     }
   ],
   KeySchema: [
@@ -34,6 +38,22 @@ const params = {
       KeySchema: [
         {
           AttributeName: 'email',
+          KeyType: 'HASH'
+        }
+      ],
+      Projection: {
+        ProjectionType: 'ALL'
+      },
+      ProvisionedThroughput: {
+        ReadCapacityUnits: 1,
+        WriteCapacityUnits: 1
+      }
+    },
+    {
+      IndexName: 'status-index',
+      KeySchema: [
+        {
+          AttributeName: 'status',
           KeyType: 'HASH'
         }
       ],

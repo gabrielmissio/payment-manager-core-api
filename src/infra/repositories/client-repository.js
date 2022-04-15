@@ -27,6 +27,19 @@ const getProfileByPK = async ({ PK } = {}) => {
   return DYNAMODB_DOCUMENT_CLIENT.get(parametros).promise();
 };
 
+const getProfilesByStatus = async ({ status } = {}) => {
+  if (!status) throw new MissingParamError('status');
+
+  const parametros = {
+    TableName: PAYMENT_MANAGER_TABLE_NAME,
+    IndexName: 'status-index',
+    KeyConditionExpression: 'status = :status',
+    ExpressionAttributeValues: { ':status': status }
+  };
+
+  return DYNAMODB_DOCUMENT_CLIENT.query(parametros).promise();
+};
+
 const updateProfileByPK = async ({ PK, SK, ...profile }) => {
   if (!PK) throw new MissingParamError('PK');
 
@@ -43,5 +56,6 @@ const updateProfileByPK = async ({ PK, SK, ...profile }) => {
 module.exports = {
   create,
   getProfileByPK,
+  getProfilesByStatus,
   updateProfileByPK
 };
