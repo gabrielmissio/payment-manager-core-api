@@ -1,4 +1,5 @@
 /* eslint-disable no-console */
+/* this file is only useful for development */
 const { DYNAMODB } = require('../../main/config/aws-resources');
 const { PAYMENT_MANAGER_TABLE_NAME, NODE_ENV } = require('../../main/config/env');
 
