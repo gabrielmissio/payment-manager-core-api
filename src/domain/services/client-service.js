@@ -13,7 +13,7 @@ const createClient = async (payload) => {
     status: 'ACTIVE'
   };
 
-  const client = { ...payload, ...additionalInfo };
+  const client = { ...payload, ...additionalInfo, clientId: payload.cpf };
   await ClientRepository.create({ client: ClientProfileAdapter.inputOne(client) });
 
   return client;
@@ -22,7 +22,7 @@ const createClient = async (payload) => {
 const getClientProfile = async ({ clientId }) => {
   if (!clientId) throw new MissingParamError('clientId');
 
-  const data = await ClientRepository.getProfileByPK(ClientProfileAdapter.inputOne({ cpf: clientId }));
+  const data = await ClientRepository.getProfileByPK(ClientProfileAdapter.inputOne({ clientId }));
   const client = ClientProfileAdapter.outputOne(data);
 
   return client;
@@ -36,8 +36,21 @@ const getClients = async (filters = { status: 'ACTIVE' }) => {
   return clients;
 };
 
+const updateClientProfile = async ({ cpf, ...payload }) => {
+  if (!payload) throw new MissingParamError('payload');
+
+  const currentDate = DataHelper.getCurrentDateISOString();
+  const dataForUpdate = { ...payload, updatedAt: currentDate };
+
+  const data = await ClientRepository.updateProfileByPK(ClientProfileAdapter.inputOne(dataForUpdate));
+  const client = ClientProfileAdapter.outputOne(data);
+
+  return client;
+};
+
 module.exports = {
   createClient,
   getClientProfile,
-  getClients
+  getClients,
+  updateClientProfile
 };

@@ -1,13 +1,13 @@
 const inputOne = (payload) => ({
-  PK: `CLIENT#${payload.cpf}`,
+  PK: `CLIENT#${payload.clientId}`,
   SK: 'PROFILE',
   ...payload
 });
 
-const outputOne = ({ Item }) => {
-  if (!Item) return null;
+const outputOne = ({ Item, Attributes }) => {
+  if (!Item && !Attributes) return null;
 
-  const { PK, SK, ...data } = Item;
+  const { PK, SK, ...data } = Item || Attributes;
   return { ...data };
 };
 

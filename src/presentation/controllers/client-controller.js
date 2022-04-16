@@ -50,7 +50,15 @@ const getClientPayments = async (request) => {
 
 const updateClientProfile = async (request) => {
   try {
-    return ResponseHelper.ok({ request, message: '(PUT) - /client/:client/profile' });
+    const existingClient = await ClientService.getClientProfile(request.params);
+    if (!existingClient) return ResponseHelper.notFound('CLIENT NOT FOUND');
+
+    const updatedClient = await ClientService.updateClientProfile({
+      clientId: request.params.clientId,
+      ...request.body
+    });
+
+    return ResponseHelper.ok(updatedClient);
   } catch (error) {
     console.error(error);
     return ResponseHelper.exceptionHandler(error);
