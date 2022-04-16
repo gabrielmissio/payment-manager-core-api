@@ -3,7 +3,7 @@ const { DataHelper } = require('../../utils/helpers');
 const { ClientRepository } = require('../../infra/repositories');
 const { ClientProfileAdapter } = require('../../infra/adapters');
 
-const createClient = async (payload) => {
+const createProfile = async (payload) => {
   if (!payload) throw new MissingParamError('payload');
 
   const currentDate = DataHelper.getCurrentDateISOString();
@@ -19,7 +19,7 @@ const createClient = async (payload) => {
   return client;
 };
 
-const getClientProfile = async ({ clientId }) => {
+const getProfile = async ({ clientId }) => {
   if (!clientId) throw new MissingParamError('clientId');
 
   const data = await ClientRepository.getProfileByPK(ClientProfileAdapter.inputOne({ clientId }));
@@ -28,7 +28,7 @@ const getClientProfile = async ({ clientId }) => {
   return client;
 };
 
-const getClients = async (filters = { status: 'ACTIVE' }) => {
+const getProfiles = async (filters = { status: 'ACTIVE' }) => {
   const data = await ClientRepository.getProfilesByStatus(filters);
   const clients = ClientProfileAdapter.outputMany(data);
 
@@ -36,7 +36,7 @@ const getClients = async (filters = { status: 'ACTIVE' }) => {
   return clients;
 };
 
-const updateClientProfile = async ({ cpf, ...payload }) => {
+const updateProfile = async ({ cpf, ...payload }) => {
   if (!payload) throw new MissingParamError('payload');
 
   const currentDate = DataHelper.getCurrentDateISOString();
@@ -48,20 +48,20 @@ const updateClientProfile = async ({ cpf, ...payload }) => {
   return client;
 };
 
-const deleteClientProfile = async ({ clientId, status }) => {
+const deleteProfile = async ({ clientId, status }) => {
   if (!clientId) throw new MissingParamError('clientId');
   if (status && status === 'INACTIVE') return { message: 'CLIENT ALREADY INACTIVE' };
 
   const dataForUpdate = { clientId, status: 'INACTIVE' };
-  const data = await updateClientProfile(dataForUpdate);
+  const data = await updateProfile(dataForUpdate);
 
   return data;
 };
 
 module.exports = {
-  createClient,
-  getClientProfile,
-  getClients,
-  updateClientProfile,
-  deleteClientProfile
+  createProfile,
+  getProfile,
+  getProfiles,
+  updateProfile,
+  deleteProfile
 };

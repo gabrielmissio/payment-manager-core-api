@@ -1,5 +1,5 @@
-const ClientService = require('./client-service');
+const ClientProfileService = require('./client-profile-service');
 
 module.exports = {
-  ClientService
+  ClientProfileService
 };

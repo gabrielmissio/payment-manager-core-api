@@ -1,5 +1,7 @@
-const ClientController = require('./client-controller');
+const ClientPaymentsController = require('./client-payments-controller');
+const ClientProfileController = require('./client-profile-controller');
 
 module.exports = {
-  ClientController
+  ClientPaymentsController,
+  ClientProfileController
 };
