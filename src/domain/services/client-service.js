@@ -48,9 +48,20 @@ const updateClientProfile = async ({ cpf, ...payload }) => {
   return client;
 };
 
+const deleteClientProfile = async ({ clientId, status }) => {
+  if (!clientId) throw new MissingParamError('clientId');
+  if (status && status === 'INACTIVE') return { message: 'CLIENT ALREADY INACTIVE' };
+
+  const dataForUpdate = { clientId, status: 'INACTIVE' };
+  const data = await updateClientProfile(dataForUpdate);
+
+  return data;
+};
+
 module.exports = {
   createClient,
   getClientProfile,
   getClients,
-  updateClientProfile
+  updateClientProfile,
+  deleteClientProfile
 };

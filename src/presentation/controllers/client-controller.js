@@ -67,7 +67,12 @@ const updateClientProfile = async (request) => {
 
 const deleteClientProfile = async (request) => {
   try {
-    return ResponseHelper.ok({ request, message: '(DELETE) - /client/:client/profile' });
+    const existingClient = await ClientService.getClientProfile(request.params);
+    if (!existingClient) return ResponseHelper.notFound('CLIENT NOT FOUND');
+
+    const inactiveClient = await ClientService.deleteClientProfile(existingClient);
+
+    return ResponseHelper.ok(inactiveClient);
   } catch (error) {
     console.error(error);
     return ResponseHelper.exceptionHandler(error);
