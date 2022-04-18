@@ -1,18 +1,18 @@
 const { DYNAMODB_DOCUMENT_CLIENT } = require('../../../../../src/main/config/aws-resources');
 const { PAYMENT_MANAGER_TABLE_NAME } = require('../../../../../src/main/config/env');
-const { ClientRepository } = require('../../../../../src/infra/repositories');
-const ClientProfileFaker = require('../../../../helpers/client-profile-faker');
+const { CustomerRepository } = require('../../../../../src/infra/repositories');
+const CustomerProfileFaker = require('../../../../helpers/customer-profile-faker');
 
-const makeSut = () => ({ sut: ClientRepository });
+const makeSut = () => ({ sut: CustomerRepository });
 
-describe('Given the updateProfileByPK function of ClientRepository', () => {
-  const clientFake = ClientProfileFaker.getOne();
-  const clientFakeNewParams = ClientProfileFaker.getOne();
+describe('Given the updateProfileByPK function of CustomerRepository', () => {
+  const customerFake = CustomerProfileFaker.getOne();
+  const customerFakeNewParams = CustomerProfileFaker.getOne();
 
   beforeAll(async () => {
     await DYNAMODB_DOCUMENT_CLIENT.put({
       TableName: PAYMENT_MANAGER_TABLE_NAME,
-      Item: clientFake
+      Item: customerFake
     }).promise();
   });
 
@@ -20,27 +20,27 @@ describe('Given the updateProfileByPK function of ClientRepository', () => {
     await DYNAMODB_DOCUMENT_CLIENT.delete({
       TableName: PAYMENT_MANAGER_TABLE_NAME,
       Key: {
-        PK: clientFake.PK,
-        SK: clientFake.SK
+        PK: customerFake.PK,
+        SK: customerFake.SK
       }
     }).promise();
   });
 
-  test('Then I expect its update the provided prameters of the client in the dataBase', async () => {
+  test('Then I expect its update the provided prameters of the customer in the dataBase', async () => {
     const { sut } = makeSut();
-    delete clientFakeNewParams.PK;
+    delete customerFakeNewParams.PK;
 
-    await sut.updateProfileByPK({ PK: clientFake.PK, ...clientFakeNewParams });
+    await sut.updateProfileByPK({ PK: customerFake.PK, ...customerFakeNewParams });
 
     const db = await DYNAMODB_DOCUMENT_CLIENT.get({
       TableName: PAYMENT_MANAGER_TABLE_NAME,
-      Key: { PK: clientFake.PK, SK: 'PROFILE' }
+      Key: { PK: customerFake.PK, SK: 'PROFILE' }
     }).promise();
 
     expect(db.Item).toBeTruthy();
     expect(db.Item).toEqual({
-      PK: clientFake.PK,
-      ...clientFakeNewParams
+      PK: customerFake.PK,
+      ...customerFakeNewParams
     });
   });
 });

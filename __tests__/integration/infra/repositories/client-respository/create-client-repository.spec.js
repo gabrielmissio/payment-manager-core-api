@@ -1,33 +1,33 @@
 const { DYNAMODB_DOCUMENT_CLIENT } = require('../../../../../src/main/config/aws-resources');
 const { PAYMENT_MANAGER_TABLE_NAME } = require('../../../../../src/main/config/env');
-const { ClientRepository } = require('../../../../../src/infra/repositories');
-const ClientProfileFaker = require('../../../../helpers/client-profile-faker');
+const { CustomerRepository } = require('../../../../../src/infra/repositories');
+const CustomerProfileFaker = require('../../../../helpers/customer-profile-faker');
 
-const makeSut = () => ({ sut: ClientRepository });
+const makeSut = () => ({ sut: CustomerRepository });
 
-describe('Given the create function of ClientRepository', () => {
-  const clientFake = ClientProfileFaker.getOne();
+describe('Given the create function of CustomerRepository', () => {
+  const customerFake = CustomerProfileFaker.getOne();
 
   afterAll(async () => {
     await DYNAMODB_DOCUMENT_CLIENT.delete({
       TableName: PAYMENT_MANAGER_TABLE_NAME,
       Key: {
-        PK: clientFake.PK,
-        SK: clientFake.SK
+        PK: customerFake.PK,
+        SK: customerFake.SK
       }
     }).promise();
   });
 
-  test('Then I expect its save the client in the dataBase', async () => {
+  test('Then I expect its save the customer in the dataBase', async () => {
     const { sut } = makeSut();
-    await sut.create({ client: clientFake });
+    await sut.create({ customer: customerFake });
 
     const db = await DYNAMODB_DOCUMENT_CLIENT.get({
       TableName: PAYMENT_MANAGER_TABLE_NAME,
-      Key: { PK: clientFake.PK, SK: 'PROFILE' }
+      Key: { PK: customerFake.PK, SK: 'PROFILE' }
     }).promise();
 
     expect(db.Item).toBeTruthy();
-    expect(db.Item).toEqual(clientFake);
+    expect(db.Item).toEqual(customerFake);
   });
 });

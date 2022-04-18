@@ -1,5 +1,5 @@
-const ClientProfileAdapter = require('./client-profile-adapter');
+const CustomerProfileAdapter = require('./customer-profile-adapter');
 
 module.exports = {
-  ClientProfileAdapter
+  CustomerProfileAdapter
 };

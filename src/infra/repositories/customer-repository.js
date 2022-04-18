@@ -3,14 +3,14 @@ const { PAYMENT_MANAGER_TABLE_NAME } = require('../../main/config/env');
 const { MissingParamError } = require('../../utils/errors');
 const { DynamodbHelper } = require('../helpers');
 
-const create = async ({ client } = {}) => {
-  if (!client.PK) throw new MissingParamError('PK');
-  if (!client.SK) throw new MissingParamError('SK');
-  if (!client.cpf) throw new MissingParamError('cpf');
+const create = async ({ customer } = {}) => {
+  if (!customer.PK) throw new MissingParamError('PK');
+  if (!customer.SK) throw new MissingParamError('SK');
+  if (!customer.cpf) throw new MissingParamError('cpf');
 
   const parametros = {
     TableName: PAYMENT_MANAGER_TABLE_NAME,
-    Item: client
+    Item: customer
   };
 
   return DYNAMODB_DOCUMENT_CLIENT.put(parametros).promise();

@@ -1,26 +1,26 @@
 const { DYNAMODB_DOCUMENT_CLIENT } = require('../../../../../src/main/config/aws-resources');
 const { PAYMENT_MANAGER_TABLE_NAME } = require('../../../../../src/main/config/env');
-const { ClientRepository } = require('../../../../../src/infra/repositories');
-const ClientProfileFaker = require('../../../../helpers/client-profile-faker');
+const { CustomerRepository } = require('../../../../../src/infra/repositories');
+const CustomerProfileFaker = require('../../../../helpers/customer-profile-faker');
 
-const makeSut = () => ({ sut: ClientRepository });
+const makeSut = () => ({ sut: CustomerRepository });
 
-describe('Given the getProfileByPK function of ClientRepository', () => {
-  const clientFake = ClientProfileFaker.getOne();
+describe('Given the getProfileByPK function of CustomerRepository', () => {
+  const customerFake = CustomerProfileFaker.getOne();
 
-  describe('And there is no client profile with the provided PK in the database', () => {
+  describe('And there is no customer profile with the provided PK in the database', () => {
     test('Then I expect it returns null', async () => {
       const { sut } = makeSut();
-      const response = await sut.getProfileByPK({ PK: clientFake.PK });
+      const response = await sut.getProfileByPK({ PK: customerFake.PK });
 
       expect(response.Item).toBeFalsy();
     });
   });
-  describe('And there is already an client profile with the provided PK in the database', () => {
+  describe('And there is already an customer profile with the provided PK in the database', () => {
     beforeAll(async () => {
       await DYNAMODB_DOCUMENT_CLIENT.put({
         TableName: PAYMENT_MANAGER_TABLE_NAME,
-        Item: clientFake
+        Item: customerFake
       }).promise();
     });
 
@@ -28,17 +28,17 @@ describe('Given the getProfileByPK function of ClientRepository', () => {
       await DYNAMODB_DOCUMENT_CLIENT.delete({
         TableName: PAYMENT_MANAGER_TABLE_NAME,
         Key: {
-          PK: clientFake.PK,
-          SK: clientFake.SK
+          PK: customerFake.PK,
+          SK: customerFake.SK
         }
       }).promise();
     });
 
-    test('Then I expect it returns the client profile with the provided PK', async () => {
+    test('Then I expect it returns the customer profile with the provided PK', async () => {
       const { sut } = makeSut();
-      const response = await sut.getProfileByPK({ PK: clientFake.PK });
+      const response = await sut.getProfileByPK({ PK: customerFake.PK });
 
-      expect(response.Item).toEqual(clientFake);
+      expect(response.Item).toEqual(customerFake);
     });
   });
 });

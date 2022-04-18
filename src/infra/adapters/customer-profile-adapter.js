@@ -1,5 +1,5 @@
 const inputOne = (payload) => ({
-  PK: `CLIENT#${payload.clientId}`,
+  PK: `CUSTOMER#${payload.customerId}`,
   SK: 'PROFILE',
   ...payload
 });

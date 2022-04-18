@@ -28,25 +28,25 @@ functions:
     events:
       - http:
           method: POST
-          path: '/client'
+          path: '/customer'
           private: false
       - http:
           method: GET
-          path: '/client'
+          path: '/customer'
           private: false
       - http:
           method: GET
-          path: '/client/{clientId}/profile'
+          path: '/customer/{customerId}/profile'
           private: false
       - http:
           method: GET
-          path: '/client/{clientId}/payments'
+          path: '/customer/{customerId}/payments'
           private: false
       - http:
           method: PUT
-          path: '/client/{clientId}/profile'
+          path: '/customer/{customerId}/profile'
           private: false
       - http:
           method: DELETE
-          path: '/client/{clientId}/profile'
+          path: '/customer/{customerId}/profile'
           private: false
