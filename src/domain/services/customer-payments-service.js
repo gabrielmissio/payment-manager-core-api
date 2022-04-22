@@ -10,13 +10,14 @@ const createPayment = async (payload) => {
   const additionalInfo = {
     paymentId: currentDate,
     createdAt: currentDate,
-    updatedAt: currentDate
+    updatedAt: currentDate,
+    createdBy: 'ADMIN'
   };
 
   const payment = { ...payload, ...additionalInfo };
   await PaymentRepository.create({ payment: CustomerPaymentAdapter.inputOne(payment) });
 
-  const { customerId, ...response } = { ...payment, createdBy: 'ADMIN' }; // TODO: remove hardcoded createdBy param
+  const { customerId, ...response } = payment;
   return response;
 };
 
