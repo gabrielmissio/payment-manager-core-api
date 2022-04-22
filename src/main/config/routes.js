@@ -14,5 +14,6 @@ module.exports = (app) => {
   router.put('/customer/:customerId/profile', adapt(CustomerProfileController.updateProfile));
   router.delete('/customer/:customerId/profile', adapt(CustomerProfileController.deleteProfile));
 
+  router.post('/customer/:customerId/payments', adapt(CustomerPaymentsController.createPayment));
   router.get('/customer/:customerId/payments', adapt(CustomerPaymentsController.getPayments));
 };

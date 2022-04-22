@@ -48,14 +48,18 @@ functions:
           path: '/customer/{customerId}/profile'
           private: false
       - http:
-          method: GET
-          path: '/customer/{customerId}/payments'
-          private: false
-      - http:
           method: PUT
           path: '/customer/{customerId}/profile'
           private: false
       - http:
           method: DELETE
           path: '/customer/{customerId}/profile'
+          private: false
+      - http:
+          method: GET
+          path: '/customer/{customerId}/payments'
+          private: false
+      - http:
+          method: POST
+          path: '/customer/{customerId}/payments'
           private: false
