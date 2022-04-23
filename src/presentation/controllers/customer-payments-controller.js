@@ -1,5 +1,6 @@
 const { ResponseHelper } = require('../helpers');
 const { CustomerPaymentService, CustomerProfileService } = require('../../domain/services');
+const { serialize, serializeList } = require('../serializers/customer-payment-serializer');
 
 const createPayment = async (request) => {
   try {
@@ -8,7 +9,7 @@ const createPayment = async (request) => {
       customerId: request.params.customerId
     });
 
-    return ResponseHelper.created(newPayment);
+    return ResponseHelper.created(serialize(newPayment));
   } catch (error) {
     console.error(error);
     return ResponseHelper.exceptionHandler(error);
@@ -23,7 +24,7 @@ const getPayments = async (request) => {
     // TODO: implement filters
     const payments = await CustomerPaymentService.getPayments(request.params);
 
-    return ResponseHelper.ok(payments);
+    return ResponseHelper.ok(serializeList(payments));
   } catch (error) {
     console.error(error);
     return ResponseHelper.exceptionHandler(error);

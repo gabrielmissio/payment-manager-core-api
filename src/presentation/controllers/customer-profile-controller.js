@@ -1,5 +1,6 @@
 const { ResponseHelper } = require('../helpers');
 const { CustomerProfileService } = require('../../domain/services');
+const { serialize, serializeList } = require('../serializers/customer-profile-serializer');
 
 const createProfile = async (request) => {
   try {
@@ -8,7 +9,7 @@ const createProfile = async (request) => {
 
     const newCustomer = await CustomerProfileService.createProfile(request.body);
 
-    return ResponseHelper.created(newCustomer);
+    return ResponseHelper.created(serialize(newCustomer));
   } catch (error) {
     console.error(error);
     return ResponseHelper.exceptionHandler(error);
@@ -20,7 +21,7 @@ const getProfiles = async () => {
     // TODO: implement filters
     const customers = await CustomerProfileService.getProfiles();
 
-    return ResponseHelper.ok(customers);
+    return ResponseHelper.ok(serializeList(customers));
   } catch (error) {
     console.error(error);
     return ResponseHelper.exceptionHandler(error);
@@ -32,7 +33,7 @@ const getProfile = async (request) => {
     const customer = await CustomerProfileService.getProfile(request.params);
     if (!customer) return ResponseHelper.notFound('CLIENT NOT FOUND');
 
-    return ResponseHelper.ok(customer);
+    return ResponseHelper.ok(serialize(customer));
   } catch (error) {
     console.error(error);
     return ResponseHelper.exceptionHandler(error);
@@ -49,7 +50,7 @@ const updateProfile = async (request) => {
       ...request.body
     });
 
-    return ResponseHelper.ok(updatedCustomer);
+    return ResponseHelper.ok(serialize(updatedCustomer));
   } catch (error) {
     console.error(error);
     return ResponseHelper.exceptionHandler(error);
