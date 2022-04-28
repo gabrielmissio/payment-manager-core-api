@@ -1,8 +1,9 @@
-const serialize = ({ customerId, name, cpf, email, status, createdAt, updatedAt }) => ({
+const serialize = ({ customerId, name, cpf, email, phone, status, createdAt, updatedAt }) => ({
   customerId,
   name,
   cpf,
   email,
+  phone,
   status,
   createdAt,
   updatedAt
