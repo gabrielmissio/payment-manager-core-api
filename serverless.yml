@@ -1,9 +1,6 @@
-service: payment-manager
+service: payment-manager-app
 
 custom:
-  corsMethods: 'GET,POST'
-  corsHeaders: 'Content-Type,Authorization,X-Api-Key'
-  corsOrigins: '*'
   serverless-offline:
     httpPort: 3001
     lambdaPort: 3002
@@ -18,6 +15,20 @@ provider:
   environment:
     NODE_ENV: ${opt:stage, 'dev'}
     REGION: ${opt:region, 'localhost'}
+    PAYMENT_MANAGER_TABLE_NAME: ${ssm:/payment-manager/${opt:stage, 'dev'}/dynamoDB/paymanet-manager-table/name}
+  iam:
+    role:
+      statements:
+        - Effect: 'Allow'
+          Action:
+            - 'dynamodb:*'
+          Resource:
+            - ${ssm:/payment-manager/${opt:stage, 'dev'}/dynamoDB/paymanet-manager-table/arn}
+        - Effect: 'Allow'
+          Action:
+            - 'dynamodb:*'
+          Resource:
+            - ${ssm:/payment-manager/${opt:stage, 'dev'}/dynamoDB/paymanet-manager-table/arn}/index/*
 
 plugins:
   - serverless-offline
@@ -31,35 +42,42 @@ package:
     - '!./src/infra/migrations'
 
 functions:
-  app:
+  core:
     handler: index-app.handler
     timeout: 6
     events:
       - http:
+          cors: true
           method: POST
           path: '/customer'
           private: false
       - http:
+          cors: true
           method: GET
           path: '/customer'
           private: false
       - http:
+          cors: true
           method: GET
           path: '/customer/{customerId}/profile'
           private: false
       - http:
+          cors: true
           method: PUT
           path: '/customer/{customerId}/profile'
           private: false
       - http:
+          cors: true
           method: DELETE
           path: '/customer/{customerId}/profile'
           private: false
       - http:
+          cors: true
           method: GET
           path: '/customer/{customerId}/payments'
           private: false
       - http:
+          cors: true
           method: POST
           path: '/customer/{customerId}/payments'
           private: false
