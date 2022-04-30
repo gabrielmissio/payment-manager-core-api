@@ -1,4 +1,4 @@
-service: payment-manager-app
+service: payment-manager-core
 
 custom:
   serverless-offline:
@@ -19,12 +19,12 @@ provider:
   iam:
     role:
       statements:
-        - Effect: 'Allow'
+        - Effect: Allow
           Action:
             - 'dynamodb:*'
           Resource:
             - ${ssm:/payment-manager/${opt:stage, 'dev'}/dynamoDB/paymanet-manager-table/arn}
-        - Effect: 'Allow'
+        - Effect: Allow
           Action:
             - 'dynamodb:*'
           Resource:
@@ -42,7 +42,7 @@ package:
     - '!./src/infra/migrations'
 
 functions:
-  core:
+  app:
     handler: index-app.handler
     timeout: 6
     events:

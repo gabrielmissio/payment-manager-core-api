@@ -75,7 +75,7 @@ Resources:
         - - ''
           - 'payment-manager'
           - !Ref StageName
-          - 'dynamoDB'
+          - 'dynamodb'
           - 'paymanet-manager-table'
           - 'name'
       Type: String
@@ -89,7 +89,7 @@ Resources:
         - - ''
           - 'payment-manager'
           - !Ref StageName
-          - 'dynamoDB'
+          - 'dynamodb'
           - 'paymanet-manager-table'
           - 'arn'
       Type: String
