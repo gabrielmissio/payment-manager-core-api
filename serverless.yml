@@ -1,6 +1,12 @@
 service: payment-manager-core
 
 custom:
+  authorizer:
+    name: authorizer
+    arn: ${ssm:/payment-manager/${opt:stage, 'dev'}/cognito/user-pool/arn}
+    identitySource: method.request.header.Authorization
+    scopes:
+      - aws.cognito.signin.user.admin
   serverless-offline:
     httpPort: 3001
     lambdaPort: 3002
@@ -50,34 +56,34 @@ functions:
           cors: true
           method: POST
           path: '/customer'
-          private: false
+          authorizer: ${self:custom.authorizer}
       - http:
           cors: true
           method: GET
           path: '/customer'
-          private: false
+          authorizer: ${self:custom.authorizer}
       - http:
           cors: true
           method: GET
           path: '/customer/{customerId}/profile'
-          private: false
+          authorizer: ${self:custom.authorizer}
       - http:
           cors: true
           method: PUT
           path: '/customer/{customerId}/profile'
-          private: false
+          authorizer: ${self:custom.authorizer}
       - http:
           cors: true
           method: DELETE
           path: '/customer/{customerId}/profile'
-          private: false
+          authorizer: ${self:custom.authorizer}
       - http:
           cors: true
           method: GET
           path: '/customer/{customerId}/payments'
-          private: false
+          authorizer: ${self:custom.authorizer}
       - http:
           cors: true
           method: POST
           path: '/customer/{customerId}/payments'
-          private: false
+          authorizer: ${self:custom.authorizer}
