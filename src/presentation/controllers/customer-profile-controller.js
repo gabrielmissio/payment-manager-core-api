@@ -1,11 +1,14 @@
 const { ResponseHelper } = require('../helpers');
 const { CustomerProfileService } = require('../../domain/services');
 const { serialize, serializeList } = require('../serializers/customer-profile-serializer');
+const {
+  ErrorMessagesEnum: { CUSTOMER_ALREADY_EXISTS, CUSTOMER_NOT_FOUND }
+} = require('../../utils/enums');
 
 const createProfile = async (request) => {
   try {
     const existingCustomer = await CustomerProfileService.getProfile({ customerId: request.body.cpf });
-    if (existingCustomer) return ResponseHelper.conflict('CLIENT ALREADY EXISTS');
+    if (existingCustomer) return ResponseHelper.conflict(CUSTOMER_ALREADY_EXISTS);
 
     const newCustomer = await CustomerProfileService.createProfile(request.body);
 
@@ -31,7 +34,7 @@ const getProfiles = async () => {
 const getProfile = async (request) => {
   try {
     const customer = await CustomerProfileService.getProfile(request.params);
-    if (!customer) return ResponseHelper.notFound('CLIENT NOT FOUND');
+    if (!customer) return ResponseHelper.notFound(CUSTOMER_NOT_FOUND);
 
     return ResponseHelper.ok(serialize(customer));
   } catch (error) {
@@ -43,7 +46,7 @@ const getProfile = async (request) => {
 const updateProfile = async (request) => {
   try {
     const existingCustomer = await CustomerProfileService.getProfile(request.params);
-    if (!existingCustomer) return ResponseHelper.notFound('CLIENT NOT FOUND');
+    if (!existingCustomer) return ResponseHelper.notFound(CUSTOMER_NOT_FOUND);
 
     const updatedCustomer = await CustomerProfileService.updateProfile({
       customerId: request.params.customerId,
@@ -60,7 +63,7 @@ const updateProfile = async (request) => {
 const deleteProfile = async (request) => {
   try {
     const existingCustomer = await CustomerProfileService.getProfile(request.params);
-    if (!existingCustomer) return ResponseHelper.notFound('CLIENT NOT FOUND');
+    if (!existingCustomer) return ResponseHelper.notFound(CUSTOMER_NOT_FOUND);
 
     const inactiveCustomer = await CustomerProfileService.deleteProfile(existingCustomer);
 
