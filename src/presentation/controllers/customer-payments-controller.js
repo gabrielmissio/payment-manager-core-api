@@ -1,12 +1,13 @@
 const { ResponseHelper } = require('../helpers');
-const { CustomerPaymentService, CustomerProfileService } = require('../../domain/services');
+const { AuthService, CustomerPaymentService, CustomerProfileService } = require('../../domain/services');
 const { serialize, serializeList } = require('../serializers/customer-payment-serializer');
 
 const createPayment = async (request) => {
   try {
     const newPayment = await CustomerPaymentService.createPayment({
       ...request.body,
-      customerId: request.params.customerId
+      customerId: request.params.customerId,
+      requestUser: AuthService.getRequestUser(request.headers.authorization.split('Bearer ')[1])
     });
 
     return ResponseHelper.created(serialize(newPayment));

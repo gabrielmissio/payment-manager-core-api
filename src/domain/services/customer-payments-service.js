@@ -3,7 +3,8 @@ const { DataHelper } = require('../../utils/helpers');
 const { PaymentRepository } = require('../../infra/repositories');
 const { CustomerPaymentAdapter } = require('../../infra/adapters');
 
-const createPayment = async (payload) => {
+const createPayment = async ({ requestUser, ...payload }) => {
+  if (!requestUser) throw new MissingParamError('requestUser');
   if (!payload) throw new MissingParamError('payload');
 
   const currentDate = DataHelper.getCurrentDateISOString();
@@ -11,7 +12,7 @@ const createPayment = async (payload) => {
     paymentId: currentDate,
     createdAt: currentDate,
     updatedAt: currentDate,
-    createdBy: 'ADMIN'
+    createdBy: requestUser.username
   };
 
   const payment = { ...payload, ...additionalInfo };
