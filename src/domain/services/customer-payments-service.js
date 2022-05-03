@@ -1,7 +1,6 @@
 const { MissingParamError } = require('../../utils/errors');
 const { DataHelper } = require('../../utils/helpers');
 const { PaymentRepository } = require('../../infra/repositories');
-const { CustomerPaymentAdapter } = require('../../infra/adapters');
 
 const createPayment = async ({ requestUser, ...payload }) => {
   if (!requestUser) throw new MissingParamError('requestUser');
@@ -16,15 +15,14 @@ const createPayment = async ({ requestUser, ...payload }) => {
   };
 
   const payment = { ...payload, ...additionalInfo };
-  await PaymentRepository.create({ payment: CustomerPaymentAdapter.inputOne(payment) });
+  await PaymentRepository.create(payment);
 
   const { customerId, ...response } = payment;
   return response;
 };
 
 const getPayments = async ({ customerId }) => {
-  const data = await PaymentRepository.getPaymentsByPK({ PK: customerId });
-  const payments = CustomerPaymentAdapter.outputMany(data);
+  const payments = await PaymentRepository.getPaymentsByCustomerId({ customerId });
 
   // TODO: implement pagination
   return payments;

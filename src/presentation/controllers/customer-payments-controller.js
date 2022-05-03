@@ -7,6 +7,9 @@ const {
 
 const createPayment = async (request) => {
   try {
+    const customer = await CustomerProfileService.getProfile(request.params);
+    if (!customer) return ResponseHelper.notFound(CUSTOMER_NOT_FOUND);
+
     const newPayment = await CustomerPaymentService.createPayment({
       ...request.body,
       customerId: request.params.customerId,
