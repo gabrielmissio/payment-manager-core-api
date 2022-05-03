@@ -7,11 +7,14 @@ const createPayment = async ({ requestUser, ...payload }) => {
   if (!payload) throw new MissingParamError('payload');
 
   const currentDate = DataHelper.getCurrentDateISOString();
+  const { username } = requestUser;
+
   const additionalInfo = {
     paymentId: currentDate,
+    createdBy: username,
+    lastUpdateBy: username,
     createdAt: currentDate,
-    updatedAt: currentDate,
-    createdBy: requestUser.username
+    updatedAt: currentDate
   };
 
   const payment = { ...payload, ...additionalInfo };

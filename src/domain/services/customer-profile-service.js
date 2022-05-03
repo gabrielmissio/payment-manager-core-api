@@ -2,11 +2,16 @@ const { MissingParamError } = require('../../utils/errors');
 const { DataHelper } = require('../../utils/helpers');
 const { CustomerRepository } = require('../../infra/repositories');
 
-const createProfile = async (payload) => {
+const createProfile = async ({ requestUser, ...payload }) => {
+  if (!requestUser) throw new MissingParamError('requestUser');
   if (!payload) throw new MissingParamError('payload');
 
   const currentDate = DataHelper.getCurrentDateISOString();
+  const { username } = requestUser;
+
   const additionalInfo = {
+    createdBy: username,
+    lastUpdateBy: username,
     createdAt: currentDate,
     updatedAt: currentDate,
     status: 'ACTIVE'
@@ -32,21 +37,22 @@ const getProfiles = async (filters = { status: 'ACTIVE' }) => {
   return customers;
 };
 
-const updateProfile = async ({ cpf, ...payload }) => {
+const updateProfile = async ({ requestUser, cpf, ...payload }) => {
+  if (!requestUser) throw new MissingParamError('requestUser');
   if (!payload) throw new MissingParamError('payload');
 
   const currentDate = DataHelper.getCurrentDateISOString();
-  const dataForUpdate = { ...payload, updatedAt: currentDate };
+  const dataForUpdate = { ...payload, updatedAt: currentDate, lastUpdateBy: requestUser.username };
 
   const customer = await CustomerRepository.updateProfileById(dataForUpdate);
   return customer;
 };
 
-const deleteProfile = async ({ customerId, status }) => {
+const deleteProfile = async ({ requestUser, customerId, status }) => {
   if (!customerId) throw new MissingParamError('customerId');
   if (status && status === 'INACTIVE') return { message: 'CUSTOMER ALREADY INACTIVE' };
 
-  const dataForUpdate = { customerId, status: 'INACTIVE' };
+  const dataForUpdate = { requestUser, customerId, status: 'INACTIVE' };
   const data = await updateProfile(dataForUpdate);
 
   return data;

@@ -1,5 +1,5 @@
 const { ResponseHelper } = require('../helpers');
-const { CustomerProfileService } = require('../../domain/services');
+const { AuthService, CustomerProfileService } = require('../../domain/services');
 const { serialize, serializeList } = require('../serializers/customer-profile-serializer');
 const {
   ErrorMessagesEnum: { CUSTOMER_ALREADY_EXISTS, CUSTOMER_NOT_FOUND }
@@ -10,7 +10,10 @@ const createProfile = async (request) => {
     const existingCustomer = await CustomerProfileService.getProfile({ customerId: request.body.cpf });
     if (existingCustomer) return ResponseHelper.conflict(CUSTOMER_ALREADY_EXISTS);
 
-    const newCustomer = await CustomerProfileService.createProfile(request.body);
+    const newCustomer = await CustomerProfileService.createProfile({
+      ...request.body,
+      requestUser: AuthService.getRequestUser(request.headers.authorization.split('Bearer ')[1])
+    });
 
     return ResponseHelper.created(serialize(newCustomer));
   } catch (error) {
@@ -49,8 +52,9 @@ const updateProfile = async (request) => {
     if (!existingCustomer) return ResponseHelper.notFound(CUSTOMER_NOT_FOUND);
 
     const updatedCustomer = await CustomerProfileService.updateProfile({
+      ...request.body,
       customerId: request.params.customerId,
-      ...request.body
+      requestUser: AuthService.getRequestUser(request.headers.authorization.split('Bearer ')[1])
     });
 
     return ResponseHelper.ok(serialize(updatedCustomer));
@@ -65,7 +69,10 @@ const deleteProfile = async (request) => {
     const existingCustomer = await CustomerProfileService.getProfile(request.params);
     if (!existingCustomer) return ResponseHelper.notFound(CUSTOMER_NOT_FOUND);
 
-    const inactiveCustomer = await CustomerProfileService.deleteProfile(existingCustomer);
+    const inactiveCustomer = await CustomerProfileService.deleteProfile({
+      ...existingCustomer,
+      requestUser: AuthService.getRequestUser(request.headers.authorization.split('Bearer ')[1])
+    });
 
     return ResponseHelper.ok(inactiveCustomer); // TODO: replace ok with notContent
   } catch (error) {
