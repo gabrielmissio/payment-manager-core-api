@@ -5,6 +5,7 @@ const { DynamodbHelper } = require('../helpers');
 const { CustomerProfileAdapter } = require('../adapters');
 
 const create = async (payload) => {
+  if (!payload) throw new MissingParamError('payload');
   const customer = CustomerProfileAdapter.inputOne(payload);
 
   const parametros = {
@@ -16,6 +17,7 @@ const create = async (payload) => {
 };
 
 const getProfileById = async (payload) => {
+  if (!payload) throw new MissingParamError('payload');
   const { PK } = CustomerProfileAdapter.inputOne(payload);
 
   const parametros = {
@@ -43,8 +45,8 @@ const getProfilesByStatus = async ({ status } = {}) => {
 };
 
 const updateProfileById = async (payload) => {
+  if (!payload) throw new MissingParamError('payload');
   const { PK, SK, ...profile } = CustomerProfileAdapter.inputOne(payload);
-  if (!PK) throw new MissingParamError('PK');
 
   const parametros = {
     TableName: PAYMENT_MANAGER_TABLE_NAME,
