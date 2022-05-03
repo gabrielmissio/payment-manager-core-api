@@ -1,7 +1,6 @@
 const { MissingParamError } = require('../../utils/errors');
 const { DataHelper } = require('../../utils/helpers');
 const { CustomerRepository } = require('../../infra/repositories');
-const { CustomerProfileAdapter } = require('../../infra/adapters');
 
 const createProfile = async (payload) => {
   if (!payload) throw new MissingParamError('payload');
@@ -14,7 +13,7 @@ const createProfile = async (payload) => {
   };
 
   const customer = { ...payload, ...additionalInfo, customerId: payload.cpf };
-  await CustomerRepository.create({ customer: CustomerProfileAdapter.inputOne(customer) });
+  await CustomerRepository.create(customer);
 
   return customer;
 };
@@ -22,15 +21,12 @@ const createProfile = async (payload) => {
 const getProfile = async ({ customerId }) => {
   if (!customerId) throw new MissingParamError('customerId');
 
-  const data = await CustomerRepository.getProfileByPK(CustomerProfileAdapter.inputOne({ customerId }));
-  const customer = CustomerProfileAdapter.outputOne(data);
-
+  const customer = await CustomerRepository.getProfileById({ customerId });
   return customer;
 };
 
 const getProfiles = async (filters = { status: 'ACTIVE' }) => {
-  const data = await CustomerRepository.getProfilesByStatus(filters);
-  const customers = CustomerProfileAdapter.outputMany(data);
+  const customers = await CustomerRepository.getProfilesByStatus(filters);
 
   // TODO: implement pagination
   return customers;
@@ -42,9 +38,7 @@ const updateProfile = async ({ cpf, ...payload }) => {
   const currentDate = DataHelper.getCurrentDateISOString();
   const dataForUpdate = { ...payload, updatedAt: currentDate };
 
-  const data = await CustomerRepository.updateProfileByPK(CustomerProfileAdapter.inputOne(dataForUpdate));
-  const customer = CustomerProfileAdapter.outputOne(data);
-
+  const customer = await CustomerRepository.updateProfileById(dataForUpdate);
   return customer;
 };
 

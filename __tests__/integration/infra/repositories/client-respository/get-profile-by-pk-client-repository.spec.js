@@ -5,13 +5,13 @@ const CustomerProfileFaker = require('../../../../helpers/customer-profile-faker
 
 const makeSut = () => ({ sut: CustomerRepository });
 
-describe('Given the getProfileByPK function of CustomerRepository', () => {
+describe('Given the getProfileById function of CustomerRepository', () => {
   const customerFake = CustomerProfileFaker.getOne();
 
   describe('And there is no customer profile with the provided PK in the database', () => {
     test('Then I expect it returns null', async () => {
       const { sut } = makeSut();
-      const response = await sut.getProfileByPK({ PK: customerFake.PK });
+      const response = await sut.getProfileById({ PK: customerFake.PK });
 
       expect(response.Item).toBeFalsy();
     });
@@ -36,7 +36,7 @@ describe('Given the getProfileByPK function of CustomerRepository', () => {
 
     test('Then I expect it returns the customer profile with the provided PK', async () => {
       const { sut } = makeSut();
-      const response = await sut.getProfileByPK({ PK: customerFake.PK });
+      const response = await sut.getProfileById({ PK: customerFake.PK });
 
       expect(response.Item).toEqual(customerFake);
     });

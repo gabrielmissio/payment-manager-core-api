@@ -5,7 +5,7 @@ const CustomerProfileFaker = require('../../../../helpers/customer-profile-faker
 
 const makeSut = () => ({ sut: CustomerRepository });
 
-describe('Given the updateProfileByPK function of CustomerRepository', () => {
+describe('Given the updateProfileById function of CustomerRepository', () => {
   const customerFake = CustomerProfileFaker.getOne();
   const customerFakeNewParams = CustomerProfileFaker.getOne();
 
@@ -30,7 +30,7 @@ describe('Given the updateProfileByPK function of CustomerRepository', () => {
     const { sut } = makeSut();
     delete customerFakeNewParams.PK;
 
-    await sut.updateProfileByPK({ PK: customerFake.PK, ...customerFakeNewParams });
+    await sut.updateProfileById({ PK: customerFake.PK, ...customerFakeNewParams });
 
     const db = await DYNAMODB_DOCUMENT_CLIENT.get({
       TableName: PAYMENT_MANAGER_TABLE_NAME,

@@ -2,11 +2,10 @@ const { DYNAMODB_DOCUMENT_CLIENT } = require('../../main/config/aws-resources');
 const { PAYMENT_MANAGER_TABLE_NAME } = require('../../main/config/env');
 const { MissingParamError } = require('../../utils/errors');
 const { DynamodbHelper } = require('../helpers');
+const { CustomerProfileAdapter } = require('../adapters');
 
-const create = async ({ customer } = {}) => {
-  if (!customer.PK) throw new MissingParamError('PK');
-  if (!customer.SK) throw new MissingParamError('SK');
-  if (!customer.cpf) throw new MissingParamError('cpf');
+const create = async (payload) => {
+  const customer = CustomerProfileAdapter.inputOne(payload);
 
   const parametros = {
     TableName: PAYMENT_MANAGER_TABLE_NAME,
@@ -16,15 +15,16 @@ const create = async ({ customer } = {}) => {
   return DYNAMODB_DOCUMENT_CLIENT.put(parametros).promise();
 };
 
-const getProfileByPK = async ({ PK } = {}) => {
-  if (!PK) throw new MissingParamError('PK');
+const getProfileById = async (payload) => {
+  const { PK } = CustomerProfileAdapter.inputOne(payload);
 
   const parametros = {
     TableName: PAYMENT_MANAGER_TABLE_NAME,
     Key: { PK, SK: 'PROFILE' }
   };
 
-  return DYNAMODB_DOCUMENT_CLIENT.get(parametros).promise();
+  const data = await DYNAMODB_DOCUMENT_CLIENT.get(parametros).promise();
+  return CustomerProfileAdapter.outputOne(data);
 };
 
 const getProfilesByStatus = async ({ status } = {}) => {
@@ -38,10 +38,12 @@ const getProfilesByStatus = async ({ status } = {}) => {
     ExpressionAttributeValues: { ':status': status }
   };
 
-  return DYNAMODB_DOCUMENT_CLIENT.query(parametros).promise();
+  const data = await DYNAMODB_DOCUMENT_CLIENT.query(parametros).promise();
+  return CustomerProfileAdapter.outputMany(data);
 };
 
-const updateProfileByPK = async ({ PK, SK, ...profile }) => {
+const updateProfileById = async (payload) => {
+  const { PK, SK, ...profile } = CustomerProfileAdapter.inputOne(payload);
   if (!PK) throw new MissingParamError('PK');
 
   const parametros = {
@@ -51,12 +53,14 @@ const updateProfileByPK = async ({ PK, SK, ...profile }) => {
   };
 
   Object.assign(parametros, DynamodbHelper.makeDynamicUpdateParams(profile));
-  return DYNAMODB_DOCUMENT_CLIENT.update(parametros).promise();
+  const data = await DYNAMODB_DOCUMENT_CLIENT.update(parametros).promise();
+
+  return CustomerProfileAdapter.outputOne(data);
 };
 
 module.exports = {
   create,
-  getProfileByPK,
+  getProfileById,
   getProfilesByStatus,
-  updateProfileByPK
+  updateProfileById
 };
