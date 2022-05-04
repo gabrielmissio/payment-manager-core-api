@@ -23,6 +23,7 @@ const getPaymentsByCustomerId = async (payload) => {
     TableName: PAYMENT_MANAGER_TABLE_NAME,
     KeyConditionExpression: 'PK = :PK AND begins_with(SK, :payment)',
     ExpressionAttributeValues: { ':PK': PK, ':payment': 'PAYMENT#' }
+    // TODO: make dynamodb filter expression
   };
 
   const data = await DYNAMODB_DOCUMENT_CLIENT.query(parametros).promise();

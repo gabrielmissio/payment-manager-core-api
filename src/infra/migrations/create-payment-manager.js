@@ -13,14 +13,6 @@ const params = {
     {
       AttributeName: 'SK',
       AttributeType: 'S'
-    },
-    {
-      AttributeName: 'email',
-      AttributeType: 'S'
-    },
-    {
-      AttributeName: 'status',
-      AttributeType: 'S'
     }
   ],
   KeySchema: [
@@ -35,35 +27,23 @@ const params = {
   ],
   GlobalSecondaryIndexes: [
     {
-      IndexName: 'email-index',
+      IndexName: 'sk-index',
       KeySchema: [
         {
-          AttributeName: 'email',
+          AttributeName: 'SK',
           KeyType: 'HASH'
+        },
+        {
+          AttributeName: 'PK',
+          KeyType: 'RANGE'
         }
       ],
       Projection: {
         ProjectionType: 'ALL'
       },
       ProvisionedThroughput: {
-        ReadCapacityUnits: 1,
-        WriteCapacityUnits: 1
-      }
-    },
-    {
-      IndexName: 'status-index',
-      KeySchema: [
-        {
-          AttributeName: 'status',
-          KeyType: 'HASH'
-        }
-      ],
-      Projection: {
-        ProjectionType: 'ALL'
-      },
-      ProvisionedThroughput: {
-        ReadCapacityUnits: 1,
-        WriteCapacityUnits: 1
+        ReadCapacityUnits: 5,
+        WriteCapacityUnits: 5
       }
     }
   ],
