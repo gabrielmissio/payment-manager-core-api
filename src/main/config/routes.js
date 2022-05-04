@@ -23,6 +23,7 @@ module.exports = (app) => {
 
   router.post('/plan', adapt(PlanController.createPlan));
   router.get('/plan', adapt(PlanController.getPlans));
+  router.get('/plan/:planId', adapt(PlanController.getPlan));
   router.put('/plan/:planId', adapt(PlanController.updatePlan));
   router.delete('/plan/:planId', adapt(PlanController.deletePlan));
 };

@@ -99,6 +99,11 @@ functions:
           authorizer: ${self:custom.authorizer}
       - http:
           cors: true
+          method: GET
+          path: '/plan/{planId}'
+          authorizer: ${self:custom.authorizer}
+      - http:
+          cors: true
           method: PUT
           path: '/plan/{planId}'
           authorizer: ${self:custom.authorizer}

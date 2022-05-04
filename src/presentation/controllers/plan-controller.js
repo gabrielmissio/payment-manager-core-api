@@ -19,6 +19,18 @@ const createPlan = async (request) => {
   }
 };
 
+const getPlan = async (request) => {
+  try {
+    const plan = await PlanService.getPlan(request.params);
+    if (!plan) return ResponseHelper.notFound(PLAN_NOT_FOUND);
+
+    return ResponseHelper.ok(serialize(plan));
+  } catch (error) {
+    console.error(error);
+    return ResponseHelper.exceptionHandler(error);
+  }
+};
+
 const getPlans = async () => {
   try {
     // TODO: implement filters
@@ -69,6 +81,7 @@ const deletePlan = async (request) => {
 module.exports = {
   createPlan,
   getPlans,
+  getPlan,
   updatePlan,
   deletePlan
 };
