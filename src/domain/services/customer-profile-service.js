@@ -1,6 +1,9 @@
 const { MissingParamError } = require('../../utils/errors');
 const { DataHelper } = require('../../utils/helpers');
 const { CustomerRepository } = require('../../infra/repositories');
+const {
+  CustomerStatusEnum: { ACTIVE, INACTIVE }
+} = require('../../utils/enums');
 
 const createProfile = async ({ requestUser, ...payload }) => {
   if (!requestUser) throw new MissingParamError('requestUser');
@@ -14,7 +17,7 @@ const createProfile = async ({ requestUser, ...payload }) => {
     lastUpdateBy: username,
     createdAt: currentDate,
     updatedAt: currentDate,
-    status: 'ACTIVE'
+    status: ACTIVE
   };
 
   const customer = { ...payload, ...additionalInfo, customerId: payload.cpf };
@@ -50,9 +53,9 @@ const updateProfile = async ({ requestUser, cpf, ...payload }) => {
 
 const deleteProfile = async ({ requestUser, customerId, status }) => {
   if (!customerId) throw new MissingParamError('customerId');
-  if (status && status === 'INACTIVE') return { message: 'CUSTOMER ALREADY INACTIVE' };
+  if (status && status === INACTIVE) return { message: 'CUSTOMER ALREADY INACTIVE' };
 
-  const dataForUpdate = { requestUser, customerId, status: 'INACTIVE' };
+  const dataForUpdate = { requestUser, customerId, status: INACTIVE };
   const data = await updateProfile(dataForUpdate);
 
   return data;
