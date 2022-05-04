@@ -2,7 +2,7 @@ const { MissingParamError } = require('../../utils/errors');
 const { DataHelper } = require('../../utils/helpers');
 const { PaymentRepository } = require('../../infra/repositories');
 
-const createPayment = async ({ requestUser, ...payload }) => {
+const createPayment = async ({ requestUser, planId, ...payload }) => {
   if (!requestUser) throw new MissingParamError('requestUser');
   if (!payload) throw new MissingParamError('payload');
 

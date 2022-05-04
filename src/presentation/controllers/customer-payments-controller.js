@@ -1,8 +1,8 @@
 const { ResponseHelper } = require('../helpers');
-const { AuthService, CustomerPaymentService, CustomerProfileService } = require('../../domain/services');
+const { AuthService, CustomerPaymentService, CustomerProfileService, PlanService } = require('../../domain/services');
 const { serialize, serializeList } = require('../serializers/customer-payment-serializer');
 const {
-  ErrorMessagesEnum: { CUSTOMER_NOT_FOUND }
+  ErrorMessagesEnum: { CUSTOMER_NOT_FOUND, PLAN_NOT_FOUND }
 } = require('../../utils/enums');
 
 const createPayment = async (request) => {
@@ -10,8 +10,12 @@ const createPayment = async (request) => {
     const customer = await CustomerProfileService.getProfile(request.params);
     if (!customer) return ResponseHelper.notFound(CUSTOMER_NOT_FOUND);
 
+    const plan = await PlanService.getPlan(request.body);
+    if (!plan) return ResponseHelper.notFound(PLAN_NOT_FOUND);
+
     const newPayment = await CustomerPaymentService.createPayment({
       ...request.body,
+      plan,
       customerId: request.params.customerId,
       requestUser: AuthService.getRequestUser(request.headers.authorization.split('Bearer ')[1])
     });
