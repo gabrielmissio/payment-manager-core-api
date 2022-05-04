@@ -2,7 +2,8 @@ const { MissingParamError } = require('../../utils/errors');
 const { DataHelper } = require('../../utils/helpers');
 const { CustomerRepository } = require('../../infra/repositories');
 const {
-  CustomerStatusEnum: { ACTIVE, INACTIVE }
+  CustomerStatusEnum: { ACTIVE, INACTIVE },
+  ErrorMessagesEnum: { CUSTOMER_ALREADY_INACTIVE }
 } = require('../../utils/enums');
 
 const createProfile = async ({ requestUser, ...payload }) => {
@@ -33,7 +34,7 @@ const getProfile = async ({ customerId }) => {
   return customer;
 };
 
-const getProfiles = async (filters = { status: 'ACTIVE' }) => {
+const getProfiles = async (filters = { status: ACTIVE }) => {
   const customers = await CustomerRepository.getProfilesByStatus(filters);
 
   // TODO: implement pagination
@@ -53,7 +54,7 @@ const updateProfile = async ({ requestUser, cpf, ...payload }) => {
 
 const deleteProfile = async ({ requestUser, customerId, status }) => {
   if (!customerId) throw new MissingParamError('customerId');
-  if (status && status === INACTIVE) return { message: 'CUSTOMER ALREADY INACTIVE' };
+  if (status && status === INACTIVE) return { message: CUSTOMER_ALREADY_INACTIVE };
 
   const dataForUpdate = { requestUser, customerId, status: INACTIVE };
   const data = await updateProfile(dataForUpdate);
