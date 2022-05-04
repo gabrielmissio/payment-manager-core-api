@@ -87,3 +87,23 @@ functions:
           method: POST
           path: '/customer/{customerId}/payments'
           authorizer: ${self:custom.authorizer}
+      - http:
+          cors: true
+          method: POST
+          path: '/plan'
+          authorizer: ${self:custom.authorizer}
+      - http:
+          cors: true
+          method: GET
+          path: '/plan'
+          authorizer: ${self:custom.authorizer}
+      - http:
+          cors: true
+          method: PUT
+          path: '/plan/{planId}'
+          authorizer: ${self:custom.authorizer}
+      - http:
+          cors: true
+          method: DELETE
+          path: '/plan/{planId}'
+          authorizer: ${self:custom.authorizer}
