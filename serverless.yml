@@ -21,7 +21,7 @@ provider:
   environment:
     NODE_ENV: ${opt:stage, 'dev'}
     REGION: ${opt:region, 'localhost'}
-    PAYMENT_MANAGER_TABLE_NAME: ${ssm:/payment-manager/${opt:stage, 'dev'}/dynamoDB/paymanet-manager-table/name}
+    PAYMENT_MANAGER_TABLE_NAME: ${ssm:/payment-manager/${opt:stage, 'dev'}/dynamodb/paymanet-manager-table/name}
   iam:
     role:
       statements:
@@ -29,12 +29,12 @@ provider:
           Action:
             - 'dynamodb:*'
           Resource:
-            - ${ssm:/payment-manager/${opt:stage, 'dev'}/dynamoDB/paymanet-manager-table/arn}
+            - ${ssm:/payment-manager/${opt:stage, 'dev'}/dynamodb/paymanet-manager-table/arn}
         - Effect: Allow
           Action:
             - 'dynamodb:*'
           Resource:
-            - ${ssm:/payment-manager/${opt:stage, 'dev'}/dynamoDB/paymanet-manager-table/arn}/index/*
+            - ${ssm:/payment-manager/${opt:stage, 'dev'}/dynamodb/paymanet-manager-table/arn}/index/*
 
 plugins:
   - serverless-offline
