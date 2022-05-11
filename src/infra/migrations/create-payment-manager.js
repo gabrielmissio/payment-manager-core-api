@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 /* this file is only useful for development */
 const { DYNAMODB } = require('../../main/config/aws-resources');
 const { PAYMENT_MANAGER_TABLE_NAME, NODE_ENV } = require('../../main/config/env');
@@ -12,6 +11,10 @@ const params = {
     },
     {
       AttributeName: 'SK',
+      AttributeType: 'S'
+    },
+    {
+      AttributeName: 'endDate',
       AttributeType: 'S'
     }
   ],
@@ -36,6 +39,22 @@ const params = {
         {
           AttributeName: 'PK',
           KeyType: 'RANGE'
+        }
+      ],
+      Projection: {
+        ProjectionType: 'ALL'
+      },
+      ProvisionedThroughput: {
+        ReadCapacityUnits: 5,
+        WriteCapacityUnits: 5
+      }
+    },
+    {
+      IndexName: 'endDate-index', // TODO: add index at dynamodb-table.yaml afeter validation
+      KeySchema: [
+        {
+          AttributeName: 'endDate',
+          KeyType: 'HASH'
         }
       ],
       Projection: {
