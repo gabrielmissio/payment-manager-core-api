@@ -10,6 +10,8 @@
     "lint": "npx eslint .",
     "migrations-start": "node src/infra/migrations/create-payment-manager.js start",
     "migrations-undo": "node src/infra/migrations/create-payment-manager.js undo",
+    "seeders-start": "node src/infra/seeders/demo-payment-manager.js start",
+    "seeders-undo": "node src/infra/seeders/demo-payment-manager.js undo",
     "start:dev": "sls offline start --stage dev"
   },
   "repository": {

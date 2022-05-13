@@ -46,6 +46,7 @@ package:
     - './index-app.js'
     - './src/**'
     - '!./src/infra/migrations'
+    - '!./src/infra/seeders'
 
 functions:
   app:
