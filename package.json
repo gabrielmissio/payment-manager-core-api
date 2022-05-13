@@ -5,7 +5,10 @@
   "main": "index.js",
   "scripts": {
     "test": "jest --color --runInBand --silent",
-    "test-unit": "npm test -- -c jest-unit-config.js",
+    "test:unit": "npm test -- -c jest-unit-config.js",
+    "pretest:integration": "npm run migrations-start",
+    "test:integration": "npm test -- -c jest-integration-config.js",
+    "posttest:integration": "npm run migrations-undo",
     "prepare": "husky install",
     "lint": "npx eslint .",
     "migrations-start": "node src/infra/migrations/create-payment-manager.js start",
