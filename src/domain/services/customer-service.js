@@ -6,7 +6,7 @@ const {
   ErrorMessagesEnum: { CUSTOMER_ALREADY_INACTIVE }
 } = require('../../utils/enums');
 
-const createProfile = async ({ requestUser, ...payload }) => {
+const createCustomer = async ({ requestUser, ...payload }) => {
   if (!requestUser) throw new MissingParamError('requestUser');
   if (!payload) throw new MissingParamError('payload');
 
@@ -22,50 +22,50 @@ const createProfile = async ({ requestUser, ...payload }) => {
   };
 
   const customer = { ...payload, ...additionalInfo, customerId: payload.cpf };
-  await CustomerRepository.create(customer);
+  await CustomerRepository.createCustomer(customer);
 
   return customer;
 };
 
-const getProfile = async ({ customerId }) => {
+const getCustomer = async ({ customerId }) => {
   if (!customerId) throw new MissingParamError('customerId');
 
-  const customer = await CustomerRepository.getProfileById({ customerId });
+  const customer = await CustomerRepository.getCustomerById({ customerId });
   return customer;
 };
 
-const getProfiles = async (filters = { status: ACTIVE }) => {
-  const customers = await CustomerRepository.getProfilesByStatus(filters);
+const getCustomers = async (filters = { status: ACTIVE }) => {
+  const customers = await CustomerRepository.getCustomersByStatus(filters);
 
   // TODO: implement pagination
   return customers;
 };
 
-const updateProfile = async ({ requestUser, cpf, ...payload }) => {
+const updateCustomer = async ({ requestUser, cpf, ...payload }) => {
   if (!requestUser) throw new MissingParamError('requestUser');
   if (!payload) throw new MissingParamError('payload');
 
   const currentDate = DataHelper.getCurrentDateISOString();
   const dataForUpdate = { ...payload, updatedAt: currentDate, lastUpdateBy: requestUser.username };
 
-  const customer = await CustomerRepository.updateProfileById(dataForUpdate);
+  const customer = await CustomerRepository.updateCustomerById(dataForUpdate);
   return customer;
 };
 
-const deleteProfile = async ({ requestUser, customerId, status }) => {
+const deleteCustomer = async ({ requestUser, customerId, status }) => {
   if (!customerId) throw new MissingParamError('customerId');
   if (status && status === INACTIVE) return { message: CUSTOMER_ALREADY_INACTIVE };
 
   const dataForUpdate = { requestUser, customerId, status: INACTIVE };
-  const data = await updateProfile(dataForUpdate);
+  const data = await updateCustomer(dataForUpdate);
 
   return data;
 };
 
 module.exports = {
-  createProfile,
-  getProfile,
-  getProfiles,
-  updateProfile,
-  deleteProfile
+  createCustomer,
+  getCustomer,
+  getCustomers,
+  updateCustomer,
+  deleteCustomer
 };

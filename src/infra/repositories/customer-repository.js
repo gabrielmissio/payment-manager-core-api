@@ -4,7 +4,7 @@ const { MissingParamError } = require('../../utils/errors');
 const { DynamodbHelper } = require('../helpers');
 const { CustomerAdapter } = require('../adapters');
 
-const create = async (payload) => {
+const createCustomer = async (payload) => {
   if (!payload) throw new MissingParamError('payload');
   const customer = CustomerAdapter.inputOne(payload);
 
@@ -16,7 +16,7 @@ const create = async (payload) => {
   return DYNAMODB_DOCUMENT_CLIENT.put(parametros).promise();
 };
 
-const getProfileById = async (payload) => {
+const getCustomerById = async (payload) => {
   if (!payload) throw new MissingParamError('payload');
   const { PK } = CustomerAdapter.inputOne(payload);
 
@@ -29,7 +29,7 @@ const getProfileById = async (payload) => {
   return CustomerAdapter.outputOne(data);
 };
 
-const getProfilesByStatus = async ({ status } = {}) => {
+const getCustomersByStatus = async ({ status } = {}) => {
   if (!status) throw new MissingParamError('status');
 
   const parametros = {
@@ -45,7 +45,7 @@ const getProfilesByStatus = async ({ status } = {}) => {
   return CustomerAdapter.outputMany(data);
 };
 
-const updateProfileById = async (payload) => {
+const updateCustomerById = async (payload) => {
   if (!payload) throw new MissingParamError('payload');
   const { PK, SK, ...profile } = CustomerAdapter.inputOne(payload);
 
@@ -62,8 +62,8 @@ const updateProfileById = async (payload) => {
 };
 
 module.exports = {
-  create,
-  getProfileById,
-  getProfilesByStatus,
-  updateProfileById
+  createCustomer,
+  getCustomerById,
+  getCustomersByStatus,
+  updateCustomerById
 };

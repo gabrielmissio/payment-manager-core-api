@@ -3,7 +3,7 @@ const { PAYMENT_MANAGER_TABLE_NAME } = require('../../main/config/env');
 const { MissingParamError } = require('../../utils/errors');
 const { PaymentAdapter } = require('../adapters');
 
-const create = async (payload) => {
+const createPayment = async (payload) => {
   if (!payload) throw new MissingParamError('payload');
   const payment = PaymentAdapter.inputOne(payload);
 
@@ -31,6 +31,6 @@ const getPaymentsByCustomerId = async (payload) => {
 };
 
 module.exports = {
-  create,
+  createPayment,
   getPaymentsByCustomerId
 };

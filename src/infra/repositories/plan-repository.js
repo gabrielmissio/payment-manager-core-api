@@ -4,7 +4,7 @@ const { MissingParamError } = require('../../utils/errors');
 const { DynamodbHelper } = require('../helpers');
 const { PlanAdapter } = require('../adapters');
 
-const create = async (payload) => {
+const createPlan = async (payload) => {
   if (!payload) throw new MissingParamError('payload');
   const plan = PlanAdapter.inputOne(payload);
 
@@ -61,7 +61,7 @@ const updatePlanById = async (payload) => {
 };
 
 module.exports = {
-  create,
+  createPlan,
   getPlanById,
   getPlansByStatus,
   updatePlanById

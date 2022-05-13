@@ -8,11 +8,11 @@ const {
 module.exports = (app) => {
   app.use('/', router);
 
-  router.post('/customer', adapt(CustomerController.createProfile));
-  router.get('/customer', adapt(CustomerController.getProfiles));
-  router.get('/customer/:customerId', adapt(CustomerController.getProfile));
-  router.put('/customer/:customerId', adapt(CustomerController.updateProfile));
-  router.delete('/customer/:customerId', adapt(CustomerController.deleteProfile));
+  router.post('/customer', adapt(CustomerController.createCustomer));
+  router.get('/customer', adapt(CustomerController.getCustomers));
+  router.get('/customer/:customerId', adapt(CustomerController.getCustomer));
+  router.put('/customer/:customerId', adapt(CustomerController.updateCustomer));
+  router.delete('/customer/:customerId', adapt(CustomerController.deleteCustomer));
 
   router.post('/customer/:customerId/payments', adapt(PaymentController.createPayment));
   router.get('/customer/:customerId/payments', adapt(PaymentController.getPayments));

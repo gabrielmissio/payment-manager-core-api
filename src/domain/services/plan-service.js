@@ -22,7 +22,7 @@ const createPlan = async ({ requestUser, ...payload }) => {
   };
 
   const plan = { ...payload, ...additionalInfo, planId: IdentifierGenerator.generateUUID() };
-  await PlanRepository.create(plan);
+  await PlanRepository.createPlan(plan);
 
   return plan;
 };
