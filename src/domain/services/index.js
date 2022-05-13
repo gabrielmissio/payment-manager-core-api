@@ -1,11 +1,11 @@
 const AuthService = require('./auth-service');
-const CustomerPaymentService = require('./customer-payments-service');
-const CustomerProfileService = require('./customer-profile-service');
+const PaymentService = require('./payment-service');
+const CustomerService = require('./customer-service');
 const PlanService = require('./plan-service');
 
 module.exports = {
   AuthService,
-  CustomerPaymentService,
-  CustomerProfileService,
+  PaymentService,
+  CustomerService,
   PlanService
 };

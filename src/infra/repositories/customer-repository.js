@@ -2,11 +2,11 @@ const { DYNAMODB_DOCUMENT_CLIENT } = require('../../main/config/aws-resources');
 const { PAYMENT_MANAGER_TABLE_NAME } = require('../../main/config/env');
 const { MissingParamError } = require('../../utils/errors');
 const { DynamodbHelper } = require('../helpers');
-const { CustomerProfileAdapter } = require('../adapters');
+const { CustomerAdapter } = require('../adapters');
 
 const create = async (payload) => {
   if (!payload) throw new MissingParamError('payload');
-  const customer = CustomerProfileAdapter.inputOne(payload);
+  const customer = CustomerAdapter.inputOne(payload);
 
   const parametros = {
     TableName: PAYMENT_MANAGER_TABLE_NAME,
@@ -18,7 +18,7 @@ const create = async (payload) => {
 
 const getProfileById = async (payload) => {
   if (!payload) throw new MissingParamError('payload');
-  const { PK } = CustomerProfileAdapter.inputOne(payload);
+  const { PK } = CustomerAdapter.inputOne(payload);
 
   const parametros = {
     TableName: PAYMENT_MANAGER_TABLE_NAME,
@@ -26,7 +26,7 @@ const getProfileById = async (payload) => {
   };
 
   const data = await DYNAMODB_DOCUMENT_CLIENT.get(parametros).promise();
-  return CustomerProfileAdapter.outputOne(data);
+  return CustomerAdapter.outputOne(data);
 };
 
 const getProfilesByStatus = async ({ status } = {}) => {
@@ -42,12 +42,12 @@ const getProfilesByStatus = async ({ status } = {}) => {
   };
 
   const data = await DYNAMODB_DOCUMENT_CLIENT.query(parametros).promise();
-  return CustomerProfileAdapter.outputMany(data);
+  return CustomerAdapter.outputMany(data);
 };
 
 const updateProfileById = async (payload) => {
   if (!payload) throw new MissingParamError('payload');
-  const { PK, SK, ...profile } = CustomerProfileAdapter.inputOne(payload);
+  const { PK, SK, ...profile } = CustomerAdapter.inputOne(payload);
 
   const parametros = {
     TableName: PAYMENT_MANAGER_TABLE_NAME,
@@ -58,7 +58,7 @@ const updateProfileById = async (payload) => {
   Object.assign(parametros, DynamodbHelper.makeDynamicUpdateParams(profile));
   const data = await DYNAMODB_DOCUMENT_CLIENT.update(parametros).promise();
 
-  return CustomerProfileAdapter.outputOne(data);
+  return CustomerAdapter.outputOne(data);
 };
 
 module.exports = {

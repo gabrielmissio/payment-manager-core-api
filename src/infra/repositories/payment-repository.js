@@ -1,11 +1,11 @@
 const { DYNAMODB_DOCUMENT_CLIENT } = require('../../main/config/aws-resources');
 const { PAYMENT_MANAGER_TABLE_NAME } = require('../../main/config/env');
 const { MissingParamError } = require('../../utils/errors');
-const { CustomerPaymentAdapter } = require('../adapters');
+const { PaymentAdapter } = require('../adapters');
 
 const create = async (payload) => {
   if (!payload) throw new MissingParamError('payload');
-  const payment = CustomerPaymentAdapter.inputOne(payload);
+  const payment = PaymentAdapter.inputOne(payload);
 
   const parametros = {
     TableName: PAYMENT_MANAGER_TABLE_NAME,
@@ -17,7 +17,7 @@ const create = async (payload) => {
 
 const getPaymentsByCustomerId = async (payload) => {
   if (!payload) throw new MissingParamError('payload');
-  const { PK } = CustomerPaymentAdapter.inputOne(payload);
+  const { PK } = PaymentAdapter.inputOne(payload);
 
   const parametros = {
     TableName: PAYMENT_MANAGER_TABLE_NAME,
@@ -27,7 +27,7 @@ const getPaymentsByCustomerId = async (payload) => {
   };
 
   const data = await DYNAMODB_DOCUMENT_CLIENT.query(parametros).promise();
-  return CustomerPaymentAdapter.outputMany(data);
+  return PaymentAdapter.outputMany(data);
 };
 
 module.exports = {

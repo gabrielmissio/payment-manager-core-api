@@ -65,17 +65,17 @@ functions:
       - http:
           cors: true
           method: GET
-          path: '/customer/{customerId}/profile'
+          path: '/customer/{customerId}'
           authorizer: ${self:custom.authorizer}
       - http:
           cors: true
           method: PUT
-          path: '/customer/{customerId}/profile'
+          path: '/customer/{customerId}'
           authorizer: ${self:custom.authorizer}
       - http:
           cors: true
           method: DELETE
-          path: '/customer/{customerId}/profile'
+          path: '/customer/{customerId}'
           authorizer: ${self:custom.authorizer}
       - http:
           cors: true

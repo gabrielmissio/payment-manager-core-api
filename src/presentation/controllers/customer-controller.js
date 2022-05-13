@@ -1,5 +1,5 @@
 const { ResponseHelper } = require('../helpers');
-const { AuthService, CustomerProfileService } = require('../../domain/services');
+const { AuthService, CustomerService } = require('../../domain/services');
 const { serialize, serializeList } = require('../serializers/customer-profile-serializer');
 const {
   ErrorMessagesEnum: { CUSTOMER_ALREADY_EXISTS, CUSTOMER_NOT_FOUND }
@@ -7,10 +7,10 @@ const {
 
 const createProfile = async (request) => {
   try {
-    const existingCustomer = await CustomerProfileService.getProfile({ customerId: request.body.cpf });
+    const existingCustomer = await CustomerService.getProfile({ customerId: request.body.cpf });
     if (existingCustomer) return ResponseHelper.conflict(CUSTOMER_ALREADY_EXISTS);
 
-    const newCustomer = await CustomerProfileService.createProfile({
+    const newCustomer = await CustomerService.createProfile({
       ...request.body,
       requestUser: AuthService.getRequestUser(request.headers.authorization.split('Bearer ')[1])
     });
@@ -25,7 +25,7 @@ const createProfile = async (request) => {
 const getProfiles = async () => {
   try {
     // TODO: implement filters
-    const customers = await CustomerProfileService.getProfiles();
+    const customers = await CustomerService.getProfiles();
 
     return ResponseHelper.ok(serializeList(customers));
   } catch (error) {
@@ -36,7 +36,7 @@ const getProfiles = async () => {
 
 const getProfile = async (request) => {
   try {
-    const customer = await CustomerProfileService.getProfile(request.params);
+    const customer = await CustomerService.getProfile(request.params);
     if (!customer) return ResponseHelper.notFound(CUSTOMER_NOT_FOUND);
 
     return ResponseHelper.ok(serialize(customer));
@@ -48,10 +48,10 @@ const getProfile = async (request) => {
 
 const updateProfile = async (request) => {
   try {
-    const existingCustomer = await CustomerProfileService.getProfile(request.params);
+    const existingCustomer = await CustomerService.getProfile(request.params);
     if (!existingCustomer) return ResponseHelper.notFound(CUSTOMER_NOT_FOUND);
 
-    const updatedCustomer = await CustomerProfileService.updateProfile({
+    const updatedCustomer = await CustomerService.updateProfile({
       ...request.body,
       customerId: request.params.customerId,
       requestUser: AuthService.getRequestUser(request.headers.authorization.split('Bearer ')[1])
@@ -66,10 +66,10 @@ const updateProfile = async (request) => {
 
 const deleteProfile = async (request) => {
   try {
-    const existingCustomer = await CustomerProfileService.getProfile(request.params);
+    const existingCustomer = await CustomerService.getProfile(request.params);
     if (!existingCustomer) return ResponseHelper.notFound(CUSTOMER_NOT_FOUND);
 
-    const inactiveCustomer = await CustomerProfileService.deleteProfile({
+    const inactiveCustomer = await CustomerService.deleteProfile({
       ...existingCustomer,
       requestUser: AuthService.getRequestUser(request.headers.authorization.split('Bearer ')[1])
     });
