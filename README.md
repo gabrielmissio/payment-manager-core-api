@@ -81,6 +81,76 @@ app
  └ index-app                        → Application entry point
  └ ...                              → Other files
  ```
+
+
+
+
+## Deployment Instructions  
+  
+ 
+
+
+### Install Dependencies
+
+  
+
+
+```bash
+npm install --production
+```
+ 
+
+
+
+### Deploy API
+
+  
+  
+
+```bash
+sls deploy --verbose --stage <STAGE> --region <REGION>
+```
+
+
+
+## Running on Localhost
+  
+ 
+
+
+### Install Dependencies
+
+  
+
+
+```bash
+npm install
+```
+ 
+
+### Run Migrations and Seeders
+
+  
+  
+
+```bash
+# replace start with undo to reverse the given operation
+npm run migrations-start
+npm run seeders-start
+```
+
+
+
+
+### Start API
+
+  
+  
+
+```bash
+# omit the REGION parameter to point to the local database
+npm run start:dev -- --region <REGION>
+```
   
   
   
