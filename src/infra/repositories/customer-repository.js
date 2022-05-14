@@ -29,6 +29,18 @@ const getCustomerById = async (payload) => {
   return CustomerAdapter.outputOne(data);
 };
 
+const getCustomers = async () => {
+  const parametros = {
+    TableName: PAYMENT_MANAGER_TABLE_NAME,
+    IndexName: 'sk-index',
+    KeyConditionExpression: 'SK = :SK',
+    ExpressionAttributeValues: { ':SK': 'PROFILE' }
+  };
+
+  const data = await DYNAMODB_DOCUMENT_CLIENT.query(parametros).promise();
+  return CustomerAdapter.outputMany(data);
+};
+
 const getCustomersByStatus = async ({ status } = {}) => {
   if (!status) throw new MissingParamError('status');
 
@@ -64,6 +76,7 @@ const updateCustomerById = async (payload) => {
 module.exports = {
   createCustomer,
   getCustomerById,
+  getCustomers,
   getCustomersByStatus,
   updateCustomerById
 };

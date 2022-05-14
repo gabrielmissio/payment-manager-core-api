@@ -35,7 +35,7 @@ const getCustomer = async ({ customerId }) => {
 };
 
 const getCustomers = async (filters = { status: ACTIVE }) => {
-  const customers = await CustomerRepository.getCustomersByStatus(filters);
+  const customers = await CustomerRepository.getCustomers(filters);
 
   // TODO: implement pagination
   return customers;
