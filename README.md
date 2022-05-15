@@ -59,7 +59,7 @@ app
  └ node_modules (generated)         → NPM dependencies
  └ src                              → Application sources 
     └ domain                           → Application services layer
-       └ services                         → Application business rules  
+       └ services                         → Use cases
     └ infra                            → Application infrastructure layer
        └ adapters                         → Conuciation contracts between the domain layer and the infrastructure layer
        └ helpers                          → Database implementation helpers
