@@ -1,6 +1,9 @@
 const { MissingParamError } = require('../../utils/errors');
 const { DataHelper } = require('../../utils/helpers');
 const { PaymentRepository } = require('../../infra/repositories');
+const {
+  PaymentStatusEnum: { VALID }
+} = require('../../utils/enums');
 
 const createPayment = async ({ requestUser, planId, ...payload }) => {
   if (!requestUser) throw new MissingParamError('requestUser');
@@ -10,6 +13,7 @@ const createPayment = async ({ requestUser, planId, ...payload }) => {
   const { username } = requestUser;
 
   const additionalInfo = {
+    status: VALID,
     paymentId: currentDate,
     createdBy: username,
     lastUpdateBy: username,

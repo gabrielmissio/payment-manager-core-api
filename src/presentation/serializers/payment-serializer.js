@@ -2,6 +2,7 @@ const { serialize: planSerialize } = require('./plan-serializer');
 
 const serialize = ({
   paymentId,
+  status,
   paymentType,
   plan,
   startDate,
@@ -12,6 +13,7 @@ const serialize = ({
   updatedAt
 }) => ({
   paymentId,
+  status,
   paymentType,
   plan: (plan && planSerialize(plan)) || undefined,
   startDate,
